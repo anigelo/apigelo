@@ -1,0 +1,14 @@
+[package]
+name = "apigelo"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+actix-web = {version = "3", features = ["rustls"]}
+actix-files = "0.5"
+mime = "0.3"
+rustls = "0.17.0"
+serde = "1.0.127"
+serde_json = "1.0.66"
