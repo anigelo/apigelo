@@ -308,7 +308,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "anigelo"
+name = "apigelo"
 version = "0.1.0"
 dependencies = [
  "actix-files",
