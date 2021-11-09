@@ -18,9 +18,17 @@ pub fn episodes(media_path: &str, media_id: String) -> Result<Vec<String>, Box<d
         .find(|dir| dir.as_ref().unwrap().file_name() == OsString::from(&media_id));
     
     if let Some(media_dir) = media_dir {
+        let allowed_extensions = vec!["mkv","mp4"];
         media_dir?.path().read_dir()?
-            .map(|episode| {
-                let episode = episode?.path().file_stem().unwrap().to_os_string();
+            .map(|episode| Ok(episode?.path()))
+            .filter(|episode: &Result<PathBuf, _>| episode.is_ok())
+            .filter(|episode: &Result<PathBuf, _>| episode.as_ref().unwrap().extension().is_some())
+            .filter(|episode: &Result<PathBuf, _>| {
+                let extension = episode.as_ref().unwrap().extension().unwrap().to_str().unwrap();
+                allowed_extensions.contains(&extension)
+            })
+            .map(|episode: Result<PathBuf, Box<dyn Error>>| {
+                let episode = episode?.file_stem().unwrap().to_os_string();
                 Ok(episode.into_string().unwrap())
             })
             .collect()
