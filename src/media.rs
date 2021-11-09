@@ -1,36 +1,10 @@
-use serde::{Deserialize,Serialize};
+use serde::{Deserialize, Serialize};
 use std::future::{Ready,ready};
 use actix_web::{Responder, HttpResponse, Error, HttpRequest};
 
 #[derive(Deserialize, Serialize, Debug)]
-pub struct KitsuMediaCollection {
-    pub data: Option<Vec<KitsuMedia>>
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct KitsuMedia {
-    pub id: Option<String>,
-    pub attributes: KitsuMediaAttrs
-}
-
-#[allow(non_snake_case)]
-#[derive(Debug, Serialize, Deserialize)]
-pub struct KitsuMediaAttrs {
-    pub canonicalTitle: Option<String>,
-    pub startDate: Option<String>,
-    pub endDate: Option<String>,
-    pub posterImage: Option<KitsuMediaAttrsImages>,
-    pub coverImage: Option<KitsuMediaAttrsImages>,
-    pub synopsis: Option<String>
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-pub struct KitsuMediaAttrsImages {
-    pub tiny: Option<String>,
-    pub small: Option<String>,
-    pub medium: Option<String>,
-    pub large: Option<String>,
-    pub original: Option<String>
+pub struct MediaCollection {
+    pub data: Option<Vec<String>>
 }
 
 macro_rules! impl_responder {
@@ -51,4 +25,4 @@ macro_rules! impl_responder {
     }
 }
 
-impl_responder!(KitsuMediaCollection, KitsuMedia, KitsuMediaAttrsImages, KitsuMediaAttrs);
+impl_responder!(MediaCollection);
