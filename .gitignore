@@ -1,3 +1,5 @@
 .idea
-bin
-obj
+
+.env
+# Added by cargo
+/target

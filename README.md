@@ -1,4 +1,6 @@
 # Apigelo
 
 ## Environment variables
-`APIGELO_DATA_PATH` Path to the data folder with the metadata index file
+`APIGELO_DB_PATH` Path to the MongoDB volume
+
+`APIGELO_CONNECTION_STRING` MongoDB connection string

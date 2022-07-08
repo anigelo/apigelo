@@ -1,0 +1,11 @@
+services:
+  database:
+    image: "mongo:5.0"
+    container_name: apigelo-db
+    ports:
+      - 27017-27019:27017-27019
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=local_dev
+      - MONGO_INITDB_ROOT_PASSWORD=local_dev_pwd
+    volumes:
+      - $APIGELO_DB_PATH:/data/db
