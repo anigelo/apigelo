@@ -1,11 +1,8 @@
-FROM rust:1.59 as builder
-ENV PKG_CONFIG_ALLOW_CROSS=1
-WORKDIR /usr/src/apigelo
+FROM rust:1.61 as builder
 COPY . .
-RUN cargo install --path .
+RUN cargo build --release
 
-FROM gcr.io/distroless/cc-debian10
+FROM debian:bookworm-slim
 EXPOSE 8080
-VOLUME /media
-COPY --from=builder /usr/local/cargo/bin/apigelo /usr/local/bin/apigelo
-CMD ["apigelo"]
+COPY --from=builder ./target/release/apigelo ./target/release/apigelo
+CMD ["/target/release/apigelo"]
