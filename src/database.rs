@@ -33,7 +33,7 @@ pub async fn get_media(id: String) -> Option<Document> {
             doc! { "$match": { "_id": media_id }},
             doc! { "$limit": 1 },
             doc! { "$addFields": { "seasons": { "$size": "$seasons" } } },
-            doc! { "$project": { "_id": 0, "id": 0 } }
+            doc! { "$project": { "_id": 0, "id": 0, "path": 0, "folder_title": 0 } }
         ]).await
     }, None).await;
 
@@ -53,7 +53,7 @@ pub async fn get_media_seasons(id: String) -> Vec<Document> {
             doc! { "$limit": 1 },
             doc! { "$unwind": "$seasons" },
             doc! { "$replaceRoot": { "newRoot": "$seasons" } },
-            doc! { "$addFields": { "episodes": { "$size": "$episodes" } } }
+            doc! { "$project": { "episodes": { "$size": "$episodes" }, "number": 1, "poster": 1 } }
         ]).await
     }, vec![]).await;
 
@@ -74,7 +74,8 @@ pub async fn get_season(media_id: String, season_id: u32) -> Option<Document> {
             doc! { "$unwind": "$seasons" },
             doc! { "$replaceRoot": { "newRoot": "$seasons" } },
             doc! { "$match": { "number": season_id } },
-            doc! { "$limit": 1 }
+            doc! { "$limit": 1 },
+            doc! { "$project": {"path":0,"episodes.path":0}}
         ]).await
     }, None).await;
 

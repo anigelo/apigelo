@@ -1,7 +1,9 @@
 mod database;
 mod config;
 
+use actix_cors::Cors;
 use actix_web::{get, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::http::header;
 use dotenv::dotenv;
 
 use crate::database::*;
@@ -54,13 +56,22 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
 
     HttpServer::new(|| {
+        let cors = Cors::default()
+            .allowed_origin(&config::cors_origin())
+            .allowed_methods(vec!["GET"])
+            .allowed_headers(vec![header::ACCEPT, header::CONTENT_TYPE])
+            .max_age(3600);
+
         App::new()
+            .wrap(cors)
             .service(all_media)
             .service(media_details)
             .service(media_seasons)
             .service(media_season_details)
+            .service(actix_files::Files::new("/static", config::media_path())
+                .show_files_listing())
     })
-        .bind(("0.0.0.0", 8080))?
+        .bind(("0.0.0.0", config::http_port()))?
         .run()
         .await
 }
